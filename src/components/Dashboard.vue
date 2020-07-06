@@ -1,5 +1,6 @@
 <template>
     <div class="dashboard-wrapper">
+        <CreateProject/>
         <div v-for="project in allProjects" v-bind:key="project.id">
             <Project v-bind:project="project"/>
         </div>
@@ -8,12 +9,13 @@
 
 <script>
     import {mapActions, mapGetters} from 'vuex'
-    import Project from "@/components/Project";
+    import CreateProject from './CreateProject';
+    import Project from './Project';
 
     export default {
         name: 'Board',
         components: {
-            Project
+            Project, CreateProject
         },
         methods: {
             ...mapActions(['findAllProjects'])

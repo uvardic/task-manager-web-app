@@ -31,11 +31,33 @@ const actions = {
         } catch (e) {
             console.error(e)
         }
+    },
+    async createProject({ commit }, name) {
+        try {
+            const response = await axios({
+                method: "POST",
+                url: API_URL,
+                data: {
+                    query: `
+                        mutation {
+                            saveProject(request: {name: "${name}"}) {
+                                id,
+                                name
+                            }
+                        }
+                    `
+                }
+            });
+            commit('newProject', response.data.data.saveProject);
+        } catch (e) {
+            console.error(e)
+        }
     }
 }
 
 const mutations = {
-    setProjects: (state, projects) => (state.projects = projects)
+    setProjects: (state, projects) => (state.projects = projects),
+    newProject: (state, project) => state.projects.unshift(project)
 }
 
 export default {
