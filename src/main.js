@@ -4,6 +4,7 @@ import App from './App.vue'
 
 import store from './store'
 import Dashboard from './components/dashboard/Dashboard'
+import Project from './components/project/Project'
 
 Vue.config.productionTip = false
 Vue.use(Router)
@@ -14,12 +15,18 @@ const router = new Router({
             path: '/',
             name: 'dashboard',
             component: Dashboard
+        },
+        {
+            path: '/project',
+            name: 'project',
+            component: Project
         }
-    ]
+    ],
+    mode: 'history'
 })
 
 new Vue({
-    render: h => h(App),
+    store,
     router,
-    store
+    render: h => h(App)
 }).$mount('#app')
