@@ -1,5 +1,5 @@
 <template>
-    <div class="project-wrapper">
+    <div class="project-wrapper" @click="onClick">
         <p>{{project.name}}</p>
     </div>
 </template>
@@ -7,7 +7,14 @@
 <script>
     export default {
         name: 'ProjectCard',
-        props: ['project']
+        props: ['project'],
+        methods: {
+            onClick(e) {
+                e.preventDefault();
+                const projectId = this.$props.project.id
+                this.$router.push(`project/${projectId}`)
+            }
+        }
     }
 </script>
 

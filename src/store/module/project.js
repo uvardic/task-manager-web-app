@@ -23,6 +23,7 @@ const actions = {
                             findAllSectionsByProjectIdOrderByIndexInProject(projectId: "${projectId}") {
                                 id,
                                 name,
+                                indexInProject,
                                 project {
                                     id
                                 }
@@ -35,11 +36,46 @@ const actions = {
         } catch (e) {
             console.error(e)
         }
+    },
+    async updateSection({ commit }, request) {
+        try {
+            const response = await axios({
+                method: 'POST',
+                url: API_URL,
+                data: {
+                    query: `
+                        mutation {
+                            updateSection(existingId: "${request.id}", request: {
+                                name: "${request.name}",
+                                indexInProject: ${request.indexInProject},
+                                project: {
+                                    id: ${request.project.id}
+                                }
+                            }) {
+                                id,
+                                name,
+                                indexInProject,
+                                project {
+                                    id
+                                }
+                            }
+                        }
+                    `
+                }
+            });
+            commit('updateSection', response.data.data.updateSection)
+        } catch (e) {
+            console.error(e)
+        }
     }
 };
 
 const mutations = {
-    setSections: (state, sections) => state.sections = sections
+    setSections: (state, sections) => state.sections = sections,
+    updateSection: (state, section) => {
+        const index = state.sections.findIndex(s => s.id === section.id);
+        state.sections.splice(index, 1, section)
+    }
 };
 
 export default {
