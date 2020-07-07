@@ -1,7 +1,8 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <h3>{{section.name}}</h3>
+            <h3 v-if="!renaming" @click="renamingStarted">{{section.name}}</h3>
+            <input v-model="newName" v-if="renaming" @keypress="renamingFinished" type="text">
         </div>
         <div class="card-body">
             <ul>
@@ -14,9 +15,31 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
+
     export default {
         name: 'SectionCard',
-        props: ['section']
+        props: ['section'],
+        data() {
+            return {
+                renaming: false,
+                newName: ''
+            }
+        },
+        methods: {
+            ...mapActions(['updateSection']),
+            renamingStarted() {
+                this.renaming = true
+            },
+            renamingFinished(e) {
+                if (e.key !== 'Enter')
+                    return
+
+                this.renaming = false
+                this.section.name = this.newName
+                this.updateSection(this.section)
+            }
+        }
     }
 </script>
 
