@@ -11,7 +11,7 @@
     import {mapActions} from 'vuex'
 
     export default {
-        name: 'CreateProject',
+        name: 'CreateProjectForm',
         data() {
             return {
                 name: ''

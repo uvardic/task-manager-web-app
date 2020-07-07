@@ -1,21 +1,21 @@
 <template>
     <div class="dashboard-wrapper">
-        <CreateProject/>
+        <CreateProjectForm/>
         <div v-for="project in allProjects" v-bind:key="project.id">
-            <Project v-bind:project="project"/>
+            <ProjectCard v-bind:project="project"/>
         </div>
     </div>
 </template>
 
 <script>
     import {mapActions, mapGetters} from 'vuex'
-    import CreateProject from './CreateProject';
-    import Project from './Project';
+    import CreateProjectForm from './CreateProjectForm';
+    import ProjectCard from './ProjectCard';
 
     export default {
         name: 'Board',
         components: {
-            Project, CreateProject
+            ProjectCard, CreateProjectForm
         },
         methods: {
             ...mapActions(['findAllProjects'])

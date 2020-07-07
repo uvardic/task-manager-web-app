@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: "Project",
+        name: "ProjectCard",
         props: ["project"]
     }
 </script>

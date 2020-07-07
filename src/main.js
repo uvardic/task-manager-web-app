@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import App from './App.vue'
 
 import store from './store'
-import Board from './components/Dashboard'
+import Dashboard from './components/dashboard/Dashboard'
 
 Vue.config.productionTip = false
 Vue.use(Router)
@@ -12,8 +12,8 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            name: 'board',
-            component: Board
+            name: 'dashboard',
+            component: Dashboard
         }
     ]
 })
