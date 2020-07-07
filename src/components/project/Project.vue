@@ -1,3 +1,4 @@
+<!--suppress CssUnusedSymbol -->
 <template>
     <div class="container-fluid project-wrapper">
         <draggable v-model="sections" ghost-class="ghost" @end="onEnd">
@@ -20,12 +21,6 @@
         components: {
             SectionCard,
             draggable
-        },
-        data() {
-            return {
-                oldIndex: '',
-                newIndex: ''
-            }
         },
         methods: {
             ...mapActions([
