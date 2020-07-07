@@ -6,8 +6,8 @@
 
 <script>
     export default {
-        name: "ProjectCard",
-        props: ["project"]
+        name: 'ProjectCard',
+        props: ['project']
     }
 </script>
 

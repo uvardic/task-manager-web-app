@@ -5,7 +5,7 @@ const state = {
 };
 
 const getters = {
-    allProjects: (state) => state.projects
+    allProjects: state => state.projects
 };
 
 const API_URL = 'http://localhost:9000/graphql'
@@ -56,7 +56,7 @@ const actions = {
 }
 
 const mutations = {
-    setProjects: (state, projects) => (state.projects = projects),
+    setProjects: (state, projects) => state.projects = projects,
     newProject: (state, project) => state.projects.unshift(project)
 }
 
