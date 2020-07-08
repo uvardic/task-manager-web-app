@@ -1,4 +1,3 @@
-<!--suppress CssUnusedSymbol -->
 <template>
     <div class="container-fluid project-wrapper">
         <draggable v-model="sections" ghost-class="ghost" @end="onEnd">
@@ -55,6 +54,7 @@
     }
 </script>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
     .project-wrapper .sortable-drag {
         opacity: 0;

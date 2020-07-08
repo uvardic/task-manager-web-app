@@ -1,18 +1,18 @@
 <template>
-    <div v-if="taskFormFlag">
+    <div v-if="taskForm.show">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="form-animation">
             <div class="form-dialog">
-                <form @submit="toggleTaskForm">
+                <form @submit="onSubmit">
                     <div class="form-group">
                         <label for="task-name-input">Task name</label>
-                        <input type="text" class="form-control" id="task-name-input" placeholder="Name">
+                        <input type="text" v-model="name" class="form-control" id="task-name-input" placeholder="Name">
                     </div>
                     <div class="form-group">
                         <label for="task-description-input">Task description</label>
-                        <textarea class="form-control" id="task-description-input" placeholder="Description"/>
+                        <textarea v-model="description" class="form-control" id="task-description-input" placeholder="Description"/>
                     </div>
                     <button type="submit" class="btn btn-primary">Create</button>
                     <span style="padding-right: 10px"/>
@@ -28,15 +28,43 @@
 
     export default {
         name: 'CreateTaskForm',
+        data() {
+            return {
+                name: '',
+                description: ''
+            }
+        },
         methods: {
-            ...mapActions(['toggleTaskForm'])
+            ...mapActions([
+                'toggleTaskForm',
+                'saveTask'
+            ]),
+            onSubmit(e) {
+                e.preventDefault()
+                const sectionId = this.taskForm.sectionId
+                const numberOfTasks = this.allTasks.length
+                const request = {
+                    name: this.name,
+                    description: this.description,
+                    indexInSection: numberOfTasks,
+                    section: {
+                        id: sectionId
+                    }
+                }
+                this.saveTask(request)
+                this.toggleTaskForm()
+            }
         },
         computed: {
-            ...mapGetters(['taskFormFlag'])
+            ...mapGetters([
+                'taskForm',
+                'allTasks'
+            ])
         }
     }
 </script>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
     .modal-overlay {
         position: absolute;
