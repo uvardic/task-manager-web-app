@@ -1,18 +1,17 @@
 import axios from 'axios'
 
 const state = {
-    sections: [],
-    tasks: []
+    projects: []
 };
 
 const getters = {
-    allSections: state => state.sections
+    allProjects: state => state.projects
 };
 
 const API_URL = 'http://localhost:9000/graphql'
 
 const actions = {
-    async findAllSectionsByProjectIdOrderByIndexInProject({ commit }, projectId) {
+    async findAllProjects({ commit }) {
         try {
             const response = await axios({
                 method: 'POST',
@@ -20,67 +19,50 @@ const actions = {
                 data: {
                     query: `
                         {
-                            findAllSectionsByProjectIdOrderByIndexInProject(projectId: "${projectId}") {
+                            findAllProjects {
                                 id,
-                                name,
-                                indexInProject,
-                                project {
-                                    id
-                                }
+                                name
                             }
                         }
                     `
                 }
             });
-            commit('setSections', response.data.data.findAllSectionsByProjectIdOrderByIndexInProject)
+            commit('setProjects', response.data.data.findAllProjects);
         } catch (e) {
             console.error(e)
         }
     },
-    async updateSection({ commit }, request) {
+    async createProject({ commit }, name) {
         try {
             const response = await axios({
-                method: 'POST',
+                method: "POST",
                 url: API_URL,
                 data: {
                     query: `
                         mutation {
-                            updateSection(existingId: "${request.id}", request: {
-                                name: "${request.name}",
-                                indexInProject: ${request.indexInProject},
-                                project: {
-                                    id: ${request.project.id}
-                                }
-                            }) {
+                            saveProject(request: {name: "${name}"}) {
                                 id,
-                                name,
-                                indexInProject,
-                                project {
-                                    id
-                                }
+                                name
                             }
                         }
                     `
                 }
             });
-            commit('updateSection', response.data.data.updateSection)
+            commit('newProject', response.data.data.saveProject);
         } catch (e) {
             console.error(e)
         }
     }
-};
+}
 
 const mutations = {
-    setSections: (state, sections) => state.sections = sections,
-    updateSection: (state, section) => {
-        const index = state.sections.findIndex(s => s.id === section.id);
-        state.sections.splice(index, 1, section)
-    }
-};
+    setProjects: (state, projects) => state.projects = projects,
+    newProject: (state, project) => state.projects.unshift(project)
+}
 
 export default {
     state,
     getters,
     actions,
     mutations
-};
+}

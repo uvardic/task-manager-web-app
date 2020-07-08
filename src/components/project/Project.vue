@@ -38,7 +38,7 @@
             ...mapGetters(['allSections']),
             sections: {
                 get() {
-                    return this.$store.state.project.sections
+                    return this.$store.state.section.sections
                 },
                 set(value) {
                     this.$store.commit('setSections', value)
