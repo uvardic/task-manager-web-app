@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="task-wrapper">
-            {{task}}
+            {{task.name}}
         </div>
     </div>
 </template>

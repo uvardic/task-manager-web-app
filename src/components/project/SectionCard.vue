@@ -8,35 +8,42 @@
         <div class="card-body">
             <draggable ghost-class="ghost">
                 <transition-group type="transition" name="animation">
-                    <TaskCard v-bind:key="1" task="taks 1"/>
-                    <TaskCard v-bind:key="2" task="taks 2"/>
-                    <TaskCard v-bind:key="3" task="taks 3"/>
+                    <div v-for="task in allTasks" v-bind:key="task.id">
+                        <TaskCard v-bind:task="task"/>
+                    </div>
                 </transition-group>
             </draggable>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-secondary" @click="toggleTaskForm">Create Task</button>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
+    import {mapActions, mapGetters} from 'vuex'
     import TaskCard from './TaskCard';
     import draggable from 'vuedraggable'
 
     export default {
         name: 'SectionCard',
-        props: ['section'],
+        props: ['section', 'showCreateTaskForm'],
         components: {
             TaskCard,
-            draggable
+            draggable,
         },
         data() {
             return {
                 renaming: false,
-                newName: ''
+                newName: '',
             }
         },
         methods: {
-            ...mapActions(['updateSection']),
+            ...mapActions([
+                'updateSection',
+                'findAllTasksBySectionIdOrderByIndexInSection',
+                'toggleTaskForm'
+            ]),
             renamingStarted() {
                 this.renaming = true
             },
@@ -48,6 +55,13 @@
                 this.section.name = this.newName
                 this.updateSection(this.section)
             }
+        },
+        computed: {
+            ...mapGetters(['allTasks'])
+        },
+        created() {
+            this.findAllTasksBySectionIdOrderByIndexInSection(this.section.id)
+            console.log(this.allTasks)
         }
     }
 </script>

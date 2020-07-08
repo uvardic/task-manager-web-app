@@ -8,6 +8,7 @@
                 </div>
             </transition-group>
         </draggable>
+        <CreateTaskForm/>
     </div>
 </template>
 
@@ -15,12 +16,14 @@
     import {mapActions, mapGetters} from 'vuex'
     import draggable from 'vuedraggable'
     import SectionCard from './SectionCard';
+    import CreateTaskForm from './CreateTaskForm'
 
     export default {
         name: 'Project',
         components: {
             SectionCard,
-            draggable
+            draggable,
+            CreateTaskForm
         },
         methods: {
             ...mapActions([
