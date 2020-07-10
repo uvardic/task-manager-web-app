@@ -1,36 +1,58 @@
 <template>
-    <div class="dashboard-wrapper">
-        <CreateProjectForm/>
-        <div v-for="project in allProjects" v-bind:key="project.id">
-            <ProjectCard v-bind:project="project"/>
-        </div>
+    <div class="container">
+        <DashboardSaveProject class="margin-top"/>
+
+        <ul class="list-group margin-top">
+            <li class="list-group-item active">Projects</li>
+            <li v-if="!getProjects.length" class="list-group-item">
+                No projects found, please create a project.
+            </li>
+            <li class="list-group-item"
+                v-for="project in getProjects"
+                :key="project.id"
+            >
+                <DashboardProject :project="project"/>
+            </li>
+        </ul>
+        <DashboardDeleteProjectDialog/>
+        <DashboardUpdateProjectDialog/>
     </div>
 </template>
 
 <script>
     import {mapActions, mapGetters} from 'vuex'
-    import CreateProjectForm from './CreateProjectForm';
-    import ProjectCard from './ProjectCard';
+
+    import DashboardProject from './DashboardProject'
+    import DashboardSaveProject from './DashboardCreateProject'
+    import DashboardDeleteProjectDialog from './DashboardUpdateProjectDialog'
+    import DashboardUpdateProjectDialog from './DashboardDeleteProjectDialog'
 
     export default {
-        name: 'Board',
+        name: 'Dashboard',
+
         components: {
-            ProjectCard, CreateProjectForm
+            DashboardProject,
+            DashboardSaveProject,
+            DashboardDeleteProjectDialog,
+            DashboardUpdateProjectDialog
         },
-        methods: {
-            ...mapActions(['findAllProjects'])
-        },
+
         computed: {
-            ...mapGetters(['allProjects'])
+            ...mapGetters(['getProjects'])
         },
+
+        methods: {
+            ...mapActions(['findAllProjects']),
+        },
+
         created() {
-            this.findAllProjects();
+            this.findAllProjects()
         }
     }
 </script>
 
 <style scoped>
-    .dashboard-wrapper {
-        margin: 20px;
+    .margin-top {
+        margin-top: 5%;
     }
 </style>
