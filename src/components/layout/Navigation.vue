@@ -26,13 +26,11 @@
 <script>
     export default {
         name: 'Navigation',
-
         data() {
             return {
                 show: true
             }
         },
-
         methods: {
             toggleNavigation() {
                 this.show = !this.show

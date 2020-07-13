@@ -1,10 +1,12 @@
 <template>
     <div class="row" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
-        <div class="col-10">
+        <div class="col-9">
             {{ project.name }}
         </div>
-        <div class="col-2 d-flex justify-content-center" v-if="show">
+        <div class="col-3 d-flex justify-content-center" v-if="show">
             <div class="row">
+                <button class="btn btn-primary" @click="openAction">Open</button>
+                <span class="span"/>
                 <button class="btn btn-primary" @click="updateAction">Update</button>
                 <span class="span"/>
                 <button class="btn btn-secondary" @click="deleteAction">Delete</button>
@@ -18,15 +20,12 @@
 
     export default {
         name: 'Project',
-
         props: ['project'],
-
         data() {
             return {
                 show: false
             }
         },
-
         methods: {
             ...mapActions([
                 'toggleDeleteProjectDialog',
@@ -47,6 +46,11 @@
 
             updateAction() {
                 this.toggleUpdateProjectDialog(this.project)
+            },
+
+            openAction() {
+                const projectId = this.$props.project.id
+                this.$router.push(`project/${projectId}`)
             }
         }
     }

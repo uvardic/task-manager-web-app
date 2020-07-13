@@ -20,14 +20,12 @@
 
     export default {
         name: 'DashboardSaveProject',
-
         data() {
             return {
                 name: '',
                 errors: []
             }
         },
-
         methods: {
             ...mapActions(['saveProject']),
 

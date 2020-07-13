@@ -29,22 +29,18 @@
 
     export default {
         name: 'Dashboard',
-
         components: {
             DashboardProject,
             DashboardSaveProject,
             DashboardDeleteProjectDialog,
             DashboardUpdateProjectDialog
         },
-
         computed: {
             ...mapGetters(['getProjects'])
         },
-
         methods: {
             ...mapActions(['findAllProjects']),
         },
-
         created() {
             this.findAllProjects()
         }

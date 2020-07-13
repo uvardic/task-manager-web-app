@@ -1,11 +1,11 @@
 <template>
-    <div v-if="getDeleteProjectDialog.show">
+    <div v-if="getDeleteSectionDialog.show">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <div class="dialog">
-                <p>Are you sure you wan't to delete {{ getDeleteProjectDialog.project.name }} ?</p>
+                <p>Are you sure you wan't to delete {{ getDeleteSectionDialog.section.name }} ?</p>
                 <button class="btn btn-primary" style="margin-right: 10px" @click="confirmAction">Confirm</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
             </div>
@@ -17,25 +17,25 @@
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'DashboardUpdateProjectDialog',
+        name: 'ProjectDeleteSectionDialog',
         computed: {
-            ...mapGetters(['getDeleteProjectDialog'])
+            ...mapGetters(['getDeleteSectionDialog'])
         },
         methods: {
             ...mapActions([
-                'deleteProjectById',
-                'toggleDeleteProjectDialog'
+                'deleteSectionById',
+                'toggleDeleteSectionDialog'
             ]),
 
             confirmAction() {
-                const existingId = this.getDeleteProjectDialog.project.id
+                const existingId = this.getDeleteSectionDialog.section.id
 
-                this.deleteProjectById(existingId)
-                this.toggleDeleteProjectDialog()
+                this.deleteSectionById(existingId)
+                this.toggleDeleteSectionDialog()
             },
 
             cancelAction() {
-                this.toggleDeleteProjectDialog()
+                this.toggleDeleteSectionDialog()
             }
         }
     }

@@ -17,6 +17,8 @@ const state = {
 const getters = {
     getProjects: state => state.projects,
 
+    getProjectById: state => projectId => state.projects.find(p => p.id === projectId),
+
     getDeleteProjectDialog: state => state.deleteProjectDialog,
 
     getUpdateProjectDialog: state => state.updateProjectDialog
@@ -119,11 +121,28 @@ const mutations = {
 
     addProject: (state, project) => state.projects.push(project),
 
+    addSectionToProject: (state, { projectId, section }) => {
+        const project = state.projects.find(p => p.id === projectId)
+        project.sections.push(section)
+    },
+
     updateProject: (state, project) => {
         const index = state.projects.findIndex(p => p.id === project.id)
 
         if (index !== -1)
             state.projects.splice(index, 1, project)
+        else
+            state.projects.push(project)
+    },
+
+    updateSectionInProject: (state, { projectId, section }) => {
+        const project = state.projects.find(p => p.id === projectId)
+        const index = project.sections.findIndex(s => s.id === section.id)
+
+        if (index !== -1)
+            project.sections.splice(index, 1, section)
+        else
+            project.sections.push(section)
     },
 
     setAllProjects: (state, projects) => state.projects = projects,

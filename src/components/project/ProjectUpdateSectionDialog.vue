@@ -1,17 +1,17 @@
 <template>
-    <div v-if="getUpdateProjectDialog.show">
+    <div v-if="getUpdateSectionDialog.show">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <form class="dialog" @submit="onSubmit">
                 <div class="form-group">
-                    <label for="projectNameInput">Project name</label>
+                    <label for="sectionNameInput">Section name</label>
                     <input type="text"
                            class="form-control"
                            v-model="name"
-                           id="projectNameInput"
-                           placeholder="Project name"
+                           id="sectionNameInput"
+                           placeholder="Section name"
                     >
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
@@ -30,7 +30,7 @@
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'DashboardDeleteProjectDialog',
+        name: 'ProjectUpdateSectionDialog',
         data() {
             return {
                 name: '',
@@ -38,12 +38,12 @@
             }
         },
         computed: {
-            ...mapGetters(['getUpdateProjectDialog'])
+            ...mapGetters(['getUpdateSectionDialog'])
         },
         methods: {
             ...mapActions([
-                'updateProject',
-                'toggleUpdateProjectDialog'
+                'updateSection',
+                'toggleUpdateSectionDialog'
             ]),
 
             onSubmit(e) {
@@ -54,15 +54,16 @@
 
                 if (this.errors.length) return
 
-                const existingId = this.getUpdateProjectDialog.project.id
-                const request = { name: this.name }
+                const existingId = this.getUpdateSectionDialog.section.id
+                const request = this.getUpdateSectionDialog.section
 
-                this.updateProject({ existingId, request })
-                this.toggleUpdateProjectDialog()
+                request.name = this.name
+                this.updateSection({ existingId, request })
+                this.toggleUpdateSectionDialog()
             },
 
             cancelAction() {
-                this.toggleUpdateProjectDialog()
+                this.toggleUpdateSectionDialog()
             }
         }
     }
