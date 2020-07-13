@@ -6,39 +6,45 @@
         <transition name="dialog-animation">
             <form class="dialog" @submit="onSubmit">
                 <div class="form-group">
-                    <label for="sectionNameInput">Section name</label>
+                    <label for="sectionNameInput">Name</label>
                     <input type="text"
                            class="form-control"
                            v-model="name"
                            id="sectionNameInput"
-                           placeholder="Section name"
+                           placeholder="Name"
                     >
+                </div>
+                <div class="form-group">
+                    <label for="sectionProjectInput">Project</label>
+                    <select class="form-control" id="sectionProjectInput" v-model="project">
+                        <option v-for="project in getProjects" :key="project.id" :value="project">
+                            {{ project.name }}
+                        </option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
-                <div v-if="errors.length">
-                    <small v-for="error in errors" :key="error" class="text-danger">
-                        {{ error }}
-                    </small>
-                </div>
             </form>
         </transition>
     </div>
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
 
     export default {
         name: 'ProjectUpdateSectionDialog',
         data() {
             return {
                 name: '',
-                errors: []
+                project: ''
             }
         },
         computed: {
-            ...mapGetters(['getUpdateSectionDialog'])
+            ...mapGetters([
+                'getUpdateSectionDialog',
+                'getProjects'
+            ])
         },
         methods: {
             ...mapActions([
@@ -46,18 +52,23 @@
                 'toggleUpdateSectionDialog'
             ]),
 
+            ...mapMutations(['removeSection']),
+
             onSubmit(e) {
                 e.preventDefault()
-
-                if (!this.name)
-                    this.errors.push(`Name can't be empty!`)
-
-                if (this.errors.length) return
 
                 const existingId = this.getUpdateSectionDialog.section.id
                 const request = this.getUpdateSectionDialog.section
 
-                request.name = this.name
+                request.name = this.name ? this.name : request.name
+
+                if (this.project && this.project.id !== request.project.id) {
+                    const lastSection = this.project.sections[this.project.sections.length - 1]
+                    request.sequence = lastSection ? lastSection.sequence + 16000 : 16000
+                    request.project = this.project
+                    this.removeSection(existingId)
+                }
+
                 this.updateSection({ existingId, request })
                 this.toggleUpdateSectionDialog()
             },

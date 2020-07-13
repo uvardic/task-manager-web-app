@@ -13,7 +13,6 @@
         </div>
 
         <div class="card-body">
-
         </div>
 
         <div class="card-footer"/>
@@ -26,6 +25,12 @@
     export default {
         name: 'ProjectSection',
         props: ['section'],
+        data() {
+            return {
+                showMenu: false,
+                showSubmenu: false
+            }
+        },
         methods: {
             ...mapActions([
                 'toggleDeleteSectionDialog',

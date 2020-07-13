@@ -154,8 +154,6 @@ const mutations = {
 
         if (index !== -1)
             state.sections.splice(index, 1, section)
-        else
-            state.sections.push(section)
     },
 
     setAllSections: (state, sections) => state.sections = sections,

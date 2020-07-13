@@ -115,8 +115,14 @@ const actions = {
 
 const mutations = {
     removeProject: (state, id) => {
-        const index = state.projects.findIndex(project => project.id === id)
+        const index = state.projects.findIndex(p => p.id === id)
         state.projects.splice(index, 1)
+    },
+
+    removeSectionFromProject: (state, { projectId, section}) => {
+        const project = state.projects.find(p => p.id === projectId)
+        const index = project.sections.findIndex(s => s.id === section.id)
+        project.sections.splice(index, 1)
     },
 
     addProject: (state, project) => state.projects.push(project),
@@ -131,8 +137,6 @@ const mutations = {
 
         if (index !== -1)
             state.projects.splice(index, 1, project)
-        else
-            state.projects.push(project)
     },
 
     updateSectionInProject: (state, { projectId, section }) => {
@@ -141,8 +145,24 @@ const mutations = {
 
         if (index !== -1)
             project.sections.splice(index, 1, section)
-        else
-            project.sections.push(section)
+        // Index of section wasn't found so the section changed its project
+        else {
+            const oldProject = findOldProject()
+
+            if (oldProject) {
+                const oldIndex = oldProject.sections.findIndex(s => s.id === section.id)
+                oldProject.sections.splice(oldIndex, 1)
+            }
+        }
+
+        function findOldProject() {
+            for (const p of state.projects) {
+                for (const s of p.sections) {
+                    if (s.id === section.id)
+                        return project
+                }
+            }
+        }
     },
 
     setAllProjects: (state, projects) => state.projects = projects,
