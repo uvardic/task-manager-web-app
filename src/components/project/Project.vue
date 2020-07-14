@@ -9,8 +9,10 @@
                 </div>
             </transition-group>
         </draggable>
+
         <ProjectDeleteSectionDialog/>
         <ProjectUpdateSectionDialog/>
+        <ProjectCreateTaskDialog/>
     </div>
 </template>
 
@@ -22,6 +24,7 @@
     import ProjectSection from './ProjectSection'
     import ProjectDeleteSectionDialog from './ProjectDeleteSectionDialog'
     import ProjectUpdateSectionDialog from './ProjectUpdateSectionDialog'
+    import ProjectCreateTaskDialog from './ProjectCreateTaskDialog'
 
     export default {
         name: 'Project',
@@ -30,7 +33,8 @@
             ProjectCreateSection,
             ProjectSection,
             ProjectDeleteSectionDialog,
-            ProjectUpdateSectionDialog
+            ProjectUpdateSectionDialog,
+            ProjectCreateTaskDialog
         },
         computed: {
             ...mapGetters(['getSections']),
@@ -49,7 +53,8 @@
             ...mapActions([
                 'findAllSectionsByProjectIdOrderBySequence',
                 'findAllProjects',
-                'updateSection'
+                'updateSection',
+                'clearSections'
             ]),
 
             onDragEnd(e) {
@@ -61,10 +66,9 @@
                 const previousSectionSequence = previousSection ? previousSection.sequence : nextSection.sequence - 16000
                 const nextSectionSequence = nextSection ? nextSection.sequence : previousSection.sequence + 16000
 
-                const currentSectionSequence = (previousSectionSequence + nextSectionSequence) / 2
                 const currentSection = this.getSections[e.newIndex]
 
-                currentSection.sequence = currentSectionSequence
+                currentSection.sequence = (previousSectionSequence + nextSectionSequence) / 2
                 this.updateSection({ existingId: currentSection.id, request: currentSection })
             }
         },

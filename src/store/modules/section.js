@@ -1,8 +1,5 @@
 import axios from 'axios'
 
-// todo remove sections state and move all to project state?
-// todo no need to update both states
-// todo make this decision when implementing tasks/comments
 const state = {
     sections: [],
 
@@ -35,6 +32,7 @@ const actions = {
 
         await axios.post(API_ENDPOINT, { query, variables: { existingId } })
         commit('removeSection', existingId)
+        commit('removeSectionFromProject', existingId)
     },
 
     async saveSection({ commit }, request) {
@@ -50,6 +48,9 @@ const actions = {
                     id
                     name
                     sequence
+                    section { 
+                        id
+                    }
                 }
             }
         }`
@@ -58,7 +59,7 @@ const actions = {
         const section = response.data.data.saveSection
 
         commit('addSection', section)
-        commit('addSectionToProject', { section, projectId: section.project.id })
+        commit('addSectionToProject', { projectId: section.project.id, section })
     },
 
     async updateSection({ commit }, { existingId, request }) {
@@ -74,6 +75,9 @@ const actions = {
                     id
                     name
                     sequence
+                    section { 
+                        id
+                    }
                 }
             }
         }`
@@ -98,6 +102,9 @@ const actions = {
                     id
                     name
                     sequence
+                    section { 
+                        id
+                    }
                 }
             }
         }`
@@ -122,6 +129,9 @@ const actions = {
                     id
                     name
                     sequence
+                    section { 
+                        id
+                    }
                 }
             }
         }`
@@ -147,16 +157,50 @@ const mutations = {
         state.sections.splice(index, 1)
     },
 
+    removeTaskFromSection: (state, id) => {
+        const section = findSectionForTaskId(id)
+        const index = section.tasks.findIndex(t => t.id === id)
+        section.tasks.splice(index, 1)
+    },
+
     addSection: (state, section) => state.sections.push(section),
 
+    addTaskToSection: (state, { sectionId, task }) => {
+        const section = state.sections.find(s => s.id === sectionId)
+        section.tasks.push(task)
+    },
+
     updateSection: (state, section) => {
-        const index = state.sections.findIndex(p => p.id === section.id)
+        const index = state.sections.findIndex(s => s.id === section.id)
 
         if (index !== -1)
             state.sections.splice(index, 1, section)
     },
 
+    updateTaskInSection: (state, { sectionId, task }) => {
+        const section = state.sections.find(s => s.id === sectionId)
+        const index = section.tasks.findIndex(t => t.id === task.id)
+
+        if (index !== - 1)
+            section.tasks.splice(index, 1, task)
+        // Index of task wasn't found so the task changed its section,
+        // so we remove it from the old one
+        else {
+            const oldSection = findSectionForTaskId(task.id)
+
+            if (oldSection) {
+                const oldIndex = oldSection.tasks.findIndex(t => t.id === task.id)
+                oldSection.tasks.splice(oldIndex, 1)
+            }
+        }
+    },
+
     setAllSections: (state, sections) => state.sections = sections,
+
+    setAllTasksInSection: (state, { sectionId, tasks }) => {
+        const section = state.sections.find(s => s.id === sectionId)
+        section.tasks = tasks
+    },
 
     setDeleteSectionDialog: (state, section) => {
         state.deleteSectionDialog.show = !state.deleteSectionDialog.show
@@ -166,6 +210,15 @@ const mutations = {
     setUpdateSectionDialog: (state, section) => {
         state.updateSectionDialog.show = !state.updateSectionDialog.show
         state.updateSectionDialog.section = section
+    }
+}
+
+function findSectionForTaskId(taskId) {
+    for (const section of state.sections) {
+        for (const task of section.tasks) {
+            if (task.id === taskId)
+                return section
+        }
     }
 }
 

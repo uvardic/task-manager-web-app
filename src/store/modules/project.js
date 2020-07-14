@@ -119,9 +119,9 @@ const mutations = {
         state.projects.splice(index, 1)
     },
 
-    removeSectionFromProject: (state, { projectId, section}) => {
-        const project = state.projects.find(p => p.id === projectId)
-        const index = project.sections.findIndex(s => s.id === section.id)
+    removeSectionFromProject: (state, id) => {
+        const project = findProjectForSectionId(id)
+        const index = project.sections.findIndex(s => s.id === id)
         project.sections.splice(index, 1)
     },
 
@@ -146,21 +146,13 @@ const mutations = {
         if (index !== -1)
             project.sections.splice(index, 1, section)
         // Index of section wasn't found so the section changed its project
+        // so we remove it from the old one
         else {
-            const oldProject = findOldProject()
+            const oldProject = findProjectForSectionId(section.id)
 
             if (oldProject) {
                 const oldIndex = oldProject.sections.findIndex(s => s.id === section.id)
                 oldProject.sections.splice(oldIndex, 1)
-            }
-        }
-
-        function findOldProject() {
-            for (const p of state.projects) {
-                for (const s of p.sections) {
-                    if (s.id === section.id)
-                        return project
-                }
             }
         }
     },
@@ -175,6 +167,15 @@ const mutations = {
     setUpdateProjectDialog: (state, project) => {
         state.updateProjectDialog.show = !state.updateProjectDialog.show
         state.updateProjectDialog.project = project
+    },
+}
+
+function findProjectForSectionId(sectionId) {
+    for (const project of state.projects) {
+        for (const section of project.sections) {
+            if (section.id === sectionId)
+                return project
+        }
     }
 }
 
