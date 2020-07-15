@@ -1,13 +1,43 @@
 <template>
-    <div class="task-card" :id="task.id">
-        {{task.name}}
+    <div class="task-card" @mouseenter="show = true" @mouseleave="show = false" :id="task.id">
+        <div class="row">
+            <div class="col-10">
+                {{task.name}}
+            </div>
+            <b-dropdown v-if="show" class="col-2" variant="none">
+                <b-dropdown-item>Open</b-dropdown-item>
+                <b-dropdown-item @click="updateAction">Update</b-dropdown-item>
+                <b-dropdown-item @click="deleteAction">Delete</b-dropdown-item>
+            </b-dropdown>
+        </div>
     </div>
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
+
     export default {
         name: 'ProjectTask',
-        props: ['task']
+        props: ['task'],
+        data() {
+            return {
+                show: false
+            }
+        },
+        methods: {
+            ...mapActions([
+                'toggleDeleteTaskDialog',
+                'toggleUpdateTaskDialog'
+            ]),
+
+            deleteAction() {
+                this.toggleDeleteTaskDialog(this.task)
+            },
+
+            updateAction() {
+                this.toggleUpdateTaskDialog(this.task)
+            }
+        }
     }
 </script>
 

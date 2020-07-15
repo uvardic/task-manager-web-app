@@ -4,11 +4,25 @@ const state = {
     createTaskDialog: {
         show: false,
         section: ''
+    },
+
+    deleteTaskDialog: {
+        show: false,
+        task: ''
+    },
+
+    updateTaskDialog: {
+        show: false,
+        task: ''
     }
 }
 
 const getters = {
-    getCreateTaskDialog: state => state.createTaskDialog
+    getCreateTaskDialog: state => state.createTaskDialog,
+
+    getDeleteTaskDialog: state => state.deleteTaskDialog,
+
+    getUpdateTaskDialog: state => state.updateTaskDialog
 }
 
 const API_ENDPOINT = 'http://localhost:9000/graphql'
@@ -77,6 +91,14 @@ const actions = {
 
     toggleCreateTaskDialog({ commit }, section) {
         commit('setCreateTaskDialog', section)
+    },
+
+    toggleDeleteTaskDialog({ commit }, task) {
+        commit('setDeleteTaskDialog', task)
+    },
+
+    toggleUpdateTaskDialog({ commit }, task) {
+        commit('setUpdateTaskDialog', task)
     }
 }
 
@@ -84,6 +106,16 @@ const mutations = {
     setCreateTaskDialog: (state, section) => {
         state.createTaskDialog.show = !state.createTaskDialog.show
         state.createTaskDialog.section = section
+    },
+
+    setDeleteTaskDialog: (state, task) => {
+        state.deleteTaskDialog.show = !state.deleteTaskDialog.show
+        state.deleteTaskDialog.task = task
+    },
+
+    setUpdateTaskDialog: (state, task) => {
+        state.updateTaskDialog.show = !state.updateTaskDialog.show
+        state.updateTaskDialog.task = task
     }
 }
 

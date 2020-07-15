@@ -13,6 +13,8 @@
         <ProjectDeleteSectionDialog/>
         <ProjectUpdateSectionDialog/>
         <ProjectCreateTaskDialog/>
+        <ProjectDeleteTaskDialog/>
+        <ProjectUpdateTaskDialog/>
     </div>
 </template>
 
@@ -25,6 +27,8 @@
     import ProjectDeleteSectionDialog from './ProjectDeleteSectionDialog'
     import ProjectUpdateSectionDialog from './ProjectUpdateSectionDialog'
     import ProjectCreateTaskDialog from './ProjectCreateTaskDialog'
+    import ProjectDeleteTaskDialog from './ProjectDeleteTaskDialog'
+    import ProjectUpdateTaskDialog from './ProjectUpdateTaskDialog';
 
     export default {
         name: 'Project',
@@ -34,7 +38,9 @@
             ProjectSection,
             ProjectDeleteSectionDialog,
             ProjectUpdateSectionDialog,
-            ProjectCreateTaskDialog
+            ProjectCreateTaskDialog,
+            ProjectDeleteTaskDialog,
+            ProjectUpdateTaskDialog
         },
         computed: {
             ...mapGetters(['getSections']),
@@ -54,7 +60,6 @@
                 'findAllSectionsByProjectIdOrderBySequence',
                 'findAllProjects',
                 'updateSection',
-                'clearSections'
             ]),
 
             onDragEnd(e) {
