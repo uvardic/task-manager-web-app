@@ -43,6 +43,7 @@ const actions = {
                 id
                 name
                 sequence
+                description
                 section {
                     id
                 }
@@ -60,6 +61,7 @@ const actions = {
                 id
                 name
                 sequence
+                description
                 section {
                     id
                 }
@@ -78,6 +80,7 @@ const actions = {
                 id
                 name
                 sequence
+                description
                 section {
                     id
                 }

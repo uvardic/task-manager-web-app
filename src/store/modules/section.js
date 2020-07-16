@@ -19,7 +19,16 @@ const getters = {
 
     getDeleteSectionDialog: state => state.deleteSectionDialog,
 
-    getUpdateSectionDialog: state => state.updateSectionDialog
+    getUpdateSectionDialog: state => state.updateSectionDialog,
+
+    getTaskById: state => taskId => {
+        for (const section of state.sections) {
+            for (const task of section.tasks) {
+                if (task.id === taskId)
+                    return task
+            }
+        }
+    }
 }
 
 const API_ENDPOINT = 'http://localhost:9000/graphql'

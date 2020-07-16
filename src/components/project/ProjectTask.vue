@@ -5,7 +5,7 @@
                 {{task.name}}
             </div>
             <b-dropdown v-if="show" class="col-2" variant="none">
-                <b-dropdown-item>Open</b-dropdown-item>
+                <b-dropdown-item @click="openAction">Open</b-dropdown-item>
                 <b-dropdown-item @click="updateAction">Update</b-dropdown-item>
                 <b-dropdown-item @click="deleteAction">Delete</b-dropdown-item>
             </b-dropdown>
@@ -36,6 +36,11 @@
 
             updateAction() {
                 this.toggleUpdateTaskDialog(this.task)
+            },
+
+            openAction() {
+                const taskId = this.task.id
+                this.$router.push(`/task/${taskId}`)
             }
         }
     }
