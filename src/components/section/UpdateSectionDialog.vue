@@ -1,18 +1,26 @@
 <template>
-    <div v-if="getUpdateProjectDialog.enabled">
+    <div v-if="getUpdateSectionDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <form class="dialog" @submit="onSubmit">
                 <div class="form-group">
-                    <label for="projectNameInput">Project name</label>
+                    <label for="sectionNameInput">Name</label>
                     <input type="text"
                            class="form-control"
                            v-model="name"
-                           id="projectNameInput"
-                           placeholder="Project name"
+                           id="sectionNameInput"
+                           placeholder="Name"
                     >
+                </div>
+                <div class="form-group">
+                    <label for="sectionProjectInput">Project</label>
+                    <select class="form-control" id="sectionProjectInput" v-model="project">
+                        <option v-for="project in getProjects" :key="project.id" :value="project">
+                            {{ project.name }}
+                        </option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
@@ -22,42 +30,51 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
 
     export default {
-        name: 'DashboardDeleteProjectDialog',
+        name: 'UpdateSectionDialog',
         data() {
             return {
                 name: '',
-                errors: []
+                project: ''
             }
         },
         computed: {
-            ...mapGetters(['getUpdateProjectDialog'])
+            ...mapGetters([
+                'getUpdateSectionDialog',
+                'getProjects'
+            ])
         },
         methods: {
             ...mapActions([
-                'updateProject',
-                'toggleUpdateProjectDialog'
+                'updateSection',
+                'toggleUpdateSectionDialog'
             ]),
+
+            ...mapMutations(['removeSection']),
 
             onSubmit(e) {
                 e.preventDefault()
 
-                if (!this.name)
-                    this.errors.push(`Name can't be empty!`)
+                const existingId = this.getUpdateSectionDialog.section.id
+                const request = this.getUpdateSectionDialog.section
 
-                if (this.errors.length) return
+                request.name = this.name ? this.name : request.name
 
-                const existingId = this.getUpdateProjectDialog.project.id
-                const request = { name: this.name }
+                if (this.project && this.project.id !== request.project.id) {
+                    const lastSection = this.project.sections[this.project.sections.length - 1]
+                    request.sequence = lastSection ? lastSection.sequence + 16000 : 16000
+                    request.project = this.project
+                    this.removeSection(existingId)
+                }
 
-                this.updateProject({ existingId, request })
-                this.toggleUpdateProjectDialog()
+                this.updateSection({ existingId, request })
+                this.toggleUpdateSectionDialog()
             },
 
             cancelAction() {
-                this.toggleUpdateProjectDialog()
+                this.toggleUpdateSectionDialog()
             }
         }
     }

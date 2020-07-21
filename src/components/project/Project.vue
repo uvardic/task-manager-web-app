@@ -1,20 +1,20 @@
 <template>
     <div class="container project-wrapper">
-        <ProjectCreateSection class="margin-top"/>
+        <CreateSection class="margin-top"/>
 
         <draggable class="margin-top" v-model="sections" ghost-class="ghost" @end="onDragEnd">
             <transition-group class="row" type="transition" name="animation">
                 <div class="col" v-for="section in sections" :key="section.id">
-                    <ProjectSection :section="section"/>
+                    <Section :section="section"/>
                 </div>
             </transition-group>
         </draggable>
 
-        <ProjectDeleteSectionDialog/>
-        <ProjectUpdateSectionDialog/>
-        <ProjectCreateTaskDialog/>
-        <ProjectDeleteTaskDialog/>
-        <ProjectUpdateTaskDialog/>
+        <DeleteSectionDialog/>
+        <UpdateSectionDialog/>
+        <CreateTaskDialog/>
+        <DeleteTaskDialog/>
+        <UpdateTaskDialog/>
     </div>
 </template>
 
@@ -22,25 +22,25 @@
     import {mapActions, mapGetters} from 'vuex'
     import draggable from 'vuedraggable'
 
-    import ProjectCreateSection from './ProjectCreateSection'
-    import ProjectSection from './ProjectSection'
-    import ProjectDeleteSectionDialog from './ProjectDeleteSectionDialog'
-    import ProjectUpdateSectionDialog from './ProjectUpdateSectionDialog'
-    import ProjectCreateTaskDialog from './ProjectCreateTaskDialog'
-    import ProjectDeleteTaskDialog from './ProjectDeleteTaskDialog'
-    import ProjectUpdateTaskDialog from './ProjectUpdateTaskDialog';
+    import CreateSection from '../section/CreateSection'
+    import Section from '../section/Section'
+    import DeleteSectionDialog from '../section/DeleteSectionDialog'
+    import UpdateSectionDialog from '../section/UpdateSectionDialog'
+    import CreateTaskDialog from '../task/CreateTaskDialog'
+    import DeleteTaskDialog from '../task/DeleteTaskDialog'
+    import UpdateTaskDialog from '../task/UpdateTaskDialog';
 
     export default {
         name: 'Project',
         components: {
             draggable,
-            ProjectCreateSection,
-            ProjectSection,
-            ProjectDeleteSectionDialog,
-            ProjectUpdateSectionDialog,
-            ProjectCreateTaskDialog,
-            ProjectDeleteTaskDialog,
-            ProjectUpdateTaskDialog
+            CreateSection,
+            Section,
+            DeleteSectionDialog,
+            UpdateSectionDialog,
+            CreateTaskDialog,
+            DeleteTaskDialog,
+            UpdateTaskDialog
         },
         data() {
             return {
@@ -63,7 +63,6 @@
         methods: {
             ...mapActions([
                 'findAllSectionsByProjectIdOrderBySequence',
-                'findAllProjects',
                 'updateSection',
             ]),
 
@@ -79,7 +78,10 @@
                 const currentSection = this.getSections[e.newIndex]
 
                 currentSection.sequence = (previousSectionSequence + nextSectionSequence) / 2
-                this.updateSection({ existingId: currentSection.id, request: currentSection })
+                this.updateSection({
+                    existingId: currentSection.id,
+                    request: currentSection
+                })
             },
 
             pollProjects() {
@@ -87,7 +89,6 @@
                     () => {
                         const projectId = this.$route.params.projectId
                         this.findAllSectionsByProjectIdOrderBySequence(projectId)
-                        this.findAllProjects()
                     },
                     3000
                 )
@@ -96,7 +97,6 @@
         created() {
             const projectId = this.$route.params.projectId
             this.findAllSectionsByProjectIdOrderBySequence(projectId)
-            this.findAllProjects()
             this.pollProjects()
         },
         beforeDestroy() {

@@ -17,7 +17,7 @@
     import {mapActions} from 'vuex'
 
     export default {
-        name: 'ProjectTask',
+        name: 'SectionTask',
         props: ['task'],
         data() {
             return {

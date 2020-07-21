@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <DashboardSaveProject class="margin-top"/>
+        <CreateProject class="margin-top"/>
 
         <ul class="list-group margin-top">
             <li class="list-group-item active">Projects</li>
@@ -13,8 +13,8 @@
             </li>
         </ul>
 
-        <DashboardDeleteProjectDialog/>
-        <DashboardUpdateProjectDialog/>
+        <UpdateProjectDialog/>
+        <DeleteProjectDialog/>
     </div>
 </template>
 
@@ -22,17 +22,17 @@
     import {mapActions, mapGetters} from 'vuex'
 
     import DashboardProject from './DashboardProject'
-    import DashboardSaveProject from './DashboardCreateProject'
-    import DashboardDeleteProjectDialog from './DashboardUpdateProjectDialog'
-    import DashboardUpdateProjectDialog from './DashboardDeleteProjectDialog'
+    import CreateProject from '../project/CreateProject'
+    import UpdateProjectDialog from '../project/UpdateProjectDialog'
+    import DeleteProjectDialog from '../project/DeleteProjectDialog'
 
     export default {
         name: 'Dashboard',
         components: {
             DashboardProject,
-            DashboardSaveProject,
-            DashboardDeleteProjectDialog,
-            DashboardUpdateProjectDialog
+            CreateProject,
+            UpdateProjectDialog,
+            DeleteProjectDialog
         },
         data() {
             return {

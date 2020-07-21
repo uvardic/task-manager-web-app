@@ -19,7 +19,7 @@
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'ProjectCreateSection',
+        name: 'CreateSection',
         props: ['project'],
         data() {
             return {
@@ -52,7 +52,9 @@
                 this.saveSection({
                     name: this.name,
                     sequence,
-                    project
+                    project: {
+                        id: this.$route.params.projectId
+                    }
                 })
             },
 

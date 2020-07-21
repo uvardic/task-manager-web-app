@@ -39,7 +39,7 @@
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'ProjectCreateTaskDialog',
+        name: 'CreateTaskDialog',
         data() {
             return {
                 name: '',

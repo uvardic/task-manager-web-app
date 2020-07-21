@@ -1,27 +1,18 @@
 <template>
-    <div v-if="getUpdateTaskDialog.enabled">
+    <div v-if="getUpdateProjectDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <form class="dialog" @submit="onSubmit">
                 <div class="form-group">
-                    <label for="taskNameInput">Name</label>
+                    <label for="projectNameInput">Project name</label>
                     <input type="text"
                            class="form-control"
                            v-model="name"
-                           id="taskNameInput"
-                           placeholder="Name"
+                           id="projectNameInput"
+                           placeholder="Project name"
                     >
-                </div>
-                <div class="form-group">
-                    <label for="taskDescriptionInput">Description</label>
-                    <textarea class="form-control"
-                              id="taskDescriptionInput"
-                              rows="3"
-                              v-model="description"
-                              placeholder="Description"
-                    />
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
@@ -34,37 +25,39 @@
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'ProjectUpdateTaskDialog',
+        name: 'UpdateProjectDialog',
         data() {
             return {
                 name: '',
-                description: ''
+                errors: []
             }
         },
         computed: {
-            ...mapGetters(['getUpdateTaskDialog'])
+            ...mapGetters(['getUpdateProjectDialog'])
         },
         methods: {
             ...mapActions([
-                'updateTask',
-                'toggleUpdateTaskDialog'
+                'updateProject',
+                'toggleUpdateProjectDialog'
             ]),
 
             onSubmit(e) {
                 e.preventDefault()
 
-                const existingId = this.getUpdateTaskDialog.task.id
-                const request = this.getUpdateTaskDialog.task
+                if (!this.name)
+                    this.errors.push(`Name can't be empty!`)
 
-                request.name = this.name ? this.name : request.name
-                request.description = this.description ? this.description : request.description
+                if (this.errors.length) return
 
-                this.updateTask({ existingId, request })
-                this.toggleUpdateTaskDialog()
+                const existingId = this.getUpdateProjectDialog.project.id
+                const request = { name: this.name }
+
+                this.updateProject({ existingId, request })
+                this.toggleUpdateProjectDialog()
             },
 
             cancelAction() {
-                this.toggleUpdateTaskDialog()
+                this.toggleUpdateProjectDialog()
             }
         }
     }

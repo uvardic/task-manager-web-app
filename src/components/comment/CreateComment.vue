@@ -12,7 +12,7 @@
     import {mapActions} from 'vuex'
 
     export default {
-        name: 'TaskCreateComment',
+        name: 'CreateComment',
         data() {
             return {
                 content: ''

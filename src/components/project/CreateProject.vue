@@ -14,7 +14,7 @@
     import {mapActions} from 'vuex'
 
     export default {
-        name: 'DashboardSaveProject',
+        name: 'CreateProject',
         data() {
             return {
                 name: ''

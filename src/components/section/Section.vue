@@ -14,7 +14,7 @@
 
         <div class="card-body task-wrapper">
             <draggable :id="section.id" group="tasks" :list="section.tasks" ghost-class="ghost" @end="onDragEnd">
-                <ProjectTask v-for="task in section.tasks" :key="task.id" :task="task"/>
+                <SectionTask v-for="task in section.tasks" :key="task.id" :task="task"/>
             </draggable>
         </div>
 
@@ -26,10 +26,10 @@
     import {mapActions, mapGetters} from 'vuex'
     import draggable from 'vuedraggable'
 
-    import ProjectTask from './ProjectTask'
+    import SectionTask from './SectionTask'
 
     export default {
-        name: 'ProjectSection',
+        name: 'Section',
         props: ['section'],
         data() {
             return {
@@ -38,7 +38,7 @@
             }
         },
         components: {
-            ProjectTask,
+            SectionTask,
             draggable
         },
         computed: {

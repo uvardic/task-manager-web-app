@@ -43,33 +43,6 @@ const actions = {
         commit('updateSectionInProject', { projectId: section.project.id, section })
     },
 
-    // async findSectionById({ commit }, id) {
-    //     const query = `query ($id: ID!) {
-    //         findSectionById(id: $id) {
-    //             id
-    //             name
-    //             sequence
-    //             project {
-    //                 id
-    //             }
-    //             tasks {
-    //                 id
-    //                 name
-    //                 sequence
-    //                 section {
-    //                     id
-    //                 }
-    //             }
-    //         }
-    //     }`
-    //
-    //     const response = await axios.post(API_ENDPOINT, { query, variables: { id } })
-    //     const section = response.data.data.findSectionById
-    //
-    //     commit('updateSection', section)
-    //     commit('updateSectionInProject', { projectId: section.project.id, section })
-    // },
-
     async findAllSectionsByProjectIdOrderBySequence({ commit }, projectId) {
         const response = await findAllSectionsByProjectIdOrderBySequence(projectId)
         const sections = response.data.findAllSectionsByProjectIdOrderBySequence

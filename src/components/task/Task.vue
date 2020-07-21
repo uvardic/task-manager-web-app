@@ -3,23 +3,23 @@
         <h2>{{ task.name }}</h2>
         <p>{{ task.description ? task.description : 'No description was provided' }}</p>
         <div class="margin-top">
-            <TaskComment v-for="comment in getComments" :key="comment.id" :comment="comment"/>
+            <Comment v-for="comment in getComments" :key="comment.id" :comment="comment"/>
         </div>
-        <TaskCreateComment/>
+        <CreateComment/>
     </div>
 </template>
 
 <script>
     import {mapActions, mapGetters} from 'vuex'
 
-    import TaskCreateComment from './TaskCreateComment'
-    import TaskComment from './TaskComment'
+    import CreateComment from '../comment/CreateComment'
+    import Comment from '../comment/Comment'
 
     export default {
         name: 'Task',
         components: {
-            TaskCreateComment,
-            TaskComment
+            CreateComment,
+            Comment
         },
         data() {
             return {

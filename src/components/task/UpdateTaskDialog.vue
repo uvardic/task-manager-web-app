@@ -1,26 +1,27 @@
 <template>
-    <div v-if="getUpdateSectionDialog.enabled">
+    <div v-if="getUpdateTaskDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <form class="dialog" @submit="onSubmit">
                 <div class="form-group">
-                    <label for="sectionNameInput">Name</label>
+                    <label for="taskNameInput">Name</label>
                     <input type="text"
                            class="form-control"
                            v-model="name"
-                           id="sectionNameInput"
+                           id="taskNameInput"
                            placeholder="Name"
                     >
                 </div>
                 <div class="form-group">
-                    <label for="sectionProjectInput">Project</label>
-                    <select class="form-control" id="sectionProjectInput" v-model="project">
-                        <option v-for="project in getProjects" :key="project.id" :value="project">
-                            {{ project.name }}
-                        </option>
-                    </select>
+                    <label for="taskDescriptionInput">Description</label>
+                    <textarea class="form-control"
+                              id="taskDescriptionInput"
+                              rows="3"
+                              v-model="description"
+                              placeholder="Description"
+                    />
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
@@ -30,51 +31,40 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'ProjectUpdateSectionDialog',
+        name: 'UpdateTaskDialog',
         data() {
             return {
                 name: '',
-                project: ''
+                description: ''
             }
         },
         computed: {
-            ...mapGetters([
-                'getUpdateSectionDialog',
-                'getProjects'
-            ])
+            ...mapGetters(['getUpdateTaskDialog'])
         },
         methods: {
             ...mapActions([
-                'updateSection',
-                'toggleUpdateSectionDialog'
+                'updateTask',
+                'toggleUpdateTaskDialog'
             ]),
-
-            ...mapMutations(['removeSection']),
 
             onSubmit(e) {
                 e.preventDefault()
 
-                const existingId = this.getUpdateSectionDialog.section.id
-                const request = this.getUpdateSectionDialog.section
+                const existingId = this.getUpdateTaskDialog.task.id
+                const request = this.getUpdateTaskDialog.task
 
                 request.name = this.name ? this.name : request.name
+                request.description = this.description ? this.description : request.description
 
-                if (this.project && this.project.id !== request.project.id) {
-                    const lastSection = this.project.sections[this.project.sections.length - 1]
-                    request.sequence = lastSection ? lastSection.sequence + 16000 : 16000
-                    request.project = this.project
-                    this.removeSection(existingId)
-                }
-
-                this.updateSection({ existingId, request })
-                this.toggleUpdateSectionDialog()
+                this.updateTask({ existingId, request })
+                this.toggleUpdateTaskDialog()
             },
 
             cancelAction() {
-                this.toggleUpdateSectionDialog()
+                this.toggleUpdateTaskDialog()
             }
         }
     }

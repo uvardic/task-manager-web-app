@@ -1,11 +1,11 @@
 <template>
-    <div v-if="getDeleteSectionDialog.enabled">
+    <div v-if="getDeleteProjectDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <div class="dialog">
-                <p>Are you sure you wan't to delete {{ getDeleteSectionDialog.resource.name }} ?</p>
+                <p>Are you sure you wan't to delete {{ getDeleteProjectDialog.resource.name }} ?</p>
                 <button class="btn btn-primary" style="margin-right: 10px" @click="confirmAction">Confirm</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
             </div>
@@ -17,25 +17,24 @@
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
-        name: 'ProjectDeleteSectionDialog',
+        name: 'DeleteProjectDialog',
         computed: {
-            ...mapGetters(['getDeleteSectionDialog'])
+            ...mapGetters(['getDeleteProjectDialog'])
         },
         methods: {
             ...mapActions([
-                'deleteSectionById',
-                'toggleDeleteSectionDialog'
+                'deleteProjectById',
+                'toggleDeleteProjectDialog'
             ]),
 
             confirmAction() {
-                const existingId = this.getDeleteSectionDialog.section.id
-
-                this.deleteSectionById(existingId)
-                this.toggleDeleteSectionDialog()
+                const existingId = this.getDeleteProjectDialog.project.id
+                this.deleteProjectById(existingId)
+                this.toggleDeleteProjectDialog()
             },
 
             cancelAction() {
-                this.toggleDeleteSectionDialog()
+                this.toggleDeleteProjectDialog()
             }
         }
     }
@@ -43,6 +42,10 @@
 
 <!--suppress CssUnusedSymbol -->
 <style scoped>
+    .margin-right {
+        margin-right: 10px
+    }
+
     .modal-overlay {
         position: absolute;
         top: 0;
