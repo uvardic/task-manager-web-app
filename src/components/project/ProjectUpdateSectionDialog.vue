@@ -1,5 +1,5 @@
 <template>
-    <div v-if="getUpdateSectionDialog.show">
+    <div v-if="getUpdateSectionDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>

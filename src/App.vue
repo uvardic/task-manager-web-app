@@ -2,6 +2,7 @@
     <div id="app">
         <Navigation/>
         <router-view/>
+        <notifications group="errors" type="error" position="bottom left"/>
     </div>
 </template>
 
@@ -10,9 +11,8 @@
 
     export default {
         name: 'App',
-
         components: {
-            Navigation
+            Navigation,
         }
     }
 </script>

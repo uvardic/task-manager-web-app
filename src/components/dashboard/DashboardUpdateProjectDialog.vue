@@ -1,5 +1,5 @@
 <template>
-    <div v-if="getUpdateProjectDialog.show">
+    <div v-if="getUpdateProjectDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
@@ -16,11 +16,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
-                <div v-if="errors.length">
-                    <small v-for="error in errors" :key="error" class="text-danger">
-                        {{ error }}
-                    </small>
-                </div>
             </form>
         </transition>
     </div>

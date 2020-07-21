@@ -42,6 +42,11 @@
             ProjectDeleteTaskDialog,
             ProjectUpdateTaskDialog
         },
+        data() {
+            return {
+                pollingInterval: null
+            }
+        },
         computed: {
             ...mapGetters(['getSections']),
 
@@ -75,12 +80,27 @@
 
                 currentSection.sequence = (previousSectionSequence + nextSectionSequence) / 2
                 this.updateSection({ existingId: currentSection.id, request: currentSection })
+            },
+
+            pollProjects() {
+                this.pollingInterval = setInterval(
+                    () => {
+                        const projectId = this.$route.params.projectId
+                        this.findAllSectionsByProjectIdOrderBySequence(projectId)
+                        this.findAllProjects()
+                    },
+                    3000
+                )
             }
         },
         created() {
             const projectId = this.$route.params.projectId
-            this.findAllProjects()
             this.findAllSectionsByProjectIdOrderBySequence(projectId)
+            this.findAllProjects()
+            this.pollProjects()
+        },
+        beforeDestroy() {
+            clearInterval(this.pollingInterval)
         }
     }
 </script>

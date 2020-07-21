@@ -1,5 +1,5 @@
 <template>
-    <div v-if="getUpdateTaskDialog.show">
+    <div v-if="getUpdateTaskDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>

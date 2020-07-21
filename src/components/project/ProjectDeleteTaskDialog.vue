@@ -1,11 +1,11 @@
 <template>
-    <div v-if="getDeleteTaskDialog.show">
+    <div v-if="getDeleteTaskDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <div class="dialog">
-                <p>Are you sure you wan't to delete {{ getDeleteTaskDialog.task.name }} ?</p>
+                <p>Are you sure you wan't to delete {{ getDeleteTaskDialog.resource.name }} ?</p>
                 <button class="btn btn-primary" style="margin-right: 10px" @click="confirmAction">Confirm</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
             </div>

@@ -49,8 +49,7 @@
             },
 
             openAction() {
-                const projectId = this.$props.project.id
-                this.$router.push(`/project/${projectId}`)
+                this.$router.push(`/project/${this.project.id}`)
             }
         }
     }

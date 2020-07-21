@@ -1,11 +1,11 @@
 <template>
-    <div v-if="getDeleteProjectDialog.show">
+    <div v-if="getDeleteProjectDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <div class="dialog">
-                <p>Are you sure you wan't to delete {{ getDeleteProjectDialog.project.name }} ?</p>
+                <p>Are you sure you wan't to delete {{ getDeleteProjectDialog.resource.name }} ?</p>
                 <button class="btn btn-primary" style="margin-right: 10px" @click="confirmAction">Confirm</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
             </div>
@@ -29,7 +29,6 @@
 
             confirmAction() {
                 const existingId = this.getDeleteProjectDialog.project.id
-
                 this.deleteProjectById(existingId)
                 this.toggleDeleteProjectDialog()
             },
@@ -43,6 +42,10 @@
 
 <!--suppress CssUnusedSymbol -->
 <style scoped>
+    .margin-right {
+        margin-right: 10px
+    }
+
     .modal-overlay {
         position: absolute;
         top: 0;

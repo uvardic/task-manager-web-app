@@ -1,11 +1,11 @@
 <template>
-    <div v-if="getDeleteSectionDialog.show">
+    <div v-if="getDeleteSectionDialog.enabled">
         <transition name="overlay-animation" appear>
             <div class="modal-overlay"/>
         </transition>
         <transition name="dialog-animation">
             <div class="dialog">
-                <p>Are you sure you wan't to delete {{ getDeleteSectionDialog.section.name }} ?</p>
+                <p>Are you sure you wan't to delete {{ getDeleteSectionDialog.resource.name }} ?</p>
                 <button class="btn btn-primary" style="margin-right: 10px" @click="confirmAction">Confirm</button>
                 <button class="btn btn-secondary" @click="cancelAction">Cancel</button>
             </div>
