@@ -19,14 +19,6 @@ const saveSection = request => {
             project {
                 id
             }
-            tasks {
-                id
-                name
-                sequence
-                section { 
-                    id
-                }
-            }
         }
     }`
 
@@ -41,14 +33,6 @@ const updateSection = (existingId, request) => {
             sequence
             project {
                 id
-            }
-            tasks {
-                id
-                name
-                sequence
-                section { 
-                    id
-                }
             }
         }
     }`
@@ -65,14 +49,6 @@ const findSectionById = id => {
             project {
                 id
             }
-            tasks {
-                id
-                name
-                sequence
-                section { 
-                    id
-                }
-            }
         }
     }`
 
@@ -87,14 +63,6 @@ const findAllSectionsByProjectIdOrderBySequence = projectId => {
             sequence
             project {
                 id
-            }
-            tasks {
-                id
-                name
-                sequence
-                section { 
-                    id
-                }
             }
         }
     }`

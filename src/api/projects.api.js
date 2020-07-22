@@ -16,11 +16,6 @@ const saveProject = request => {
         saveProject(request: $request) {
             id
             name
-            sections {
-                id
-                name
-                sequence
-            }  
         }
     }`
 
@@ -32,11 +27,6 @@ const updateProject = ( existingId, request ) => {
         updateProject(existingId: $existingId, request: $request) {
             id
             name
-            sections {
-                id
-                name
-                sequence
-            } 
         }
     }`
 
@@ -48,11 +38,6 @@ const findProjectById = id => {
         findProjectById(id: $id) {
             id
             name
-            sections {
-                id
-                name
-                sequence
-            } 
         }
     }`
 
@@ -64,11 +49,6 @@ const findAllProjects = () => {
         findAllProjects {
             id
             name
-            sections {
-                id
-                name
-                sequence
-            } 
         }
     }`
 

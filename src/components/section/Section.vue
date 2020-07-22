@@ -13,8 +13,8 @@
         </div>
 
         <div class="card-body task-wrapper">
-            <draggable :id="section.id" group="tasks" :list="section.tasks" ghost-class="ghost" @end="onDragEnd">
-                <SectionTask v-for="task in section.tasks" :key="task.id" :task="task"/>
+            <draggable :id="section.id" group="tasks" :list="tasks" ghost-class="ghost" @end="onDragEnd">
+                <SectionTask v-for="task in tasks" :key="task.id" :task="task"/>
             </draggable>
         </div>
 
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
     import draggable from 'vuedraggable'
 
     import SectionTask from './SectionTask'
@@ -34,7 +34,7 @@
         data() {
             return {
                 showMenu: false,
-                showSubmenu: false
+                pollingInterval: null
             }
         },
         components: {
@@ -42,7 +42,21 @@
             draggable
         },
         computed: {
-            ...mapGetters(['getSections'])
+            ...mapGetters([
+                'getSections',
+                'getSectionById',
+                'getTaskById',
+                'getTasksBySectionId'
+            ]),
+
+            tasks: {
+                get() {
+                    return this.getTasksBySectionId(this.section.id)
+                },
+                set(tasks) {
+                    this.setTasks(tasks)
+                }
+            }
         },
         methods: {
             ...mapActions([
@@ -52,6 +66,8 @@
                 'toggleCreateTaskDialog',
                 'updateTask'
             ]),
+
+            ...mapMutations(['setTasks']),
 
             deleteAction() {
                 this.toggleDeleteSectionDialog(this.section)
@@ -66,27 +82,39 @@
             },
 
             onDragEnd(e) {
-                const targetedSection = this.getSections.find(s => s.id === e.to.id)
-                const task = targetedSection.tasks.find(t => t.id === e.item.id)
-                task.section.id = e.to.id
-
-                const previousTask = targetedSection.tasks[e.newIndex - 1]
-                const nextTask = targetedSection.tasks[e.newIndex + 1]
+                const previousTask = this.tasks[e.newIndex - 1]
+                const nextTask = this.tasks[e.newIndex + 1]
+                const draggedTask = this.getTaskById(e.item.id)
 
                 if (!previousTask && !nextTask) {
-                    task.sequence = 16000
+                    draggedTask.sequence = 16000
                 } else {
                     const previousTaskSequence = previousTask ? previousTask.sequence : nextTask.sequence - 16000
                     const nextTaskSequence = nextTask ? nextTask.sequence : previousTask.sequence + 16000
-                    task.sequence = (previousTaskSequence + nextTaskSequence) / 2
+                    draggedTask.sequence = (previousTaskSequence + nextTaskSequence) / 2
                 }
 
-                this.updateTask({ existingId: task.id, request: task })
+                draggedTask.section.id = e.to.id
+                this.updateTask({
+                    existingId: draggedTask.id,
+                    request: draggedTask
+                })
+            },
+
+            pollTasks() {
+                const timeout = 3000
+                this.pollingInterval = setInterval(
+                    () => this.findAllTasksBySectionIdOrderBySequence(this.section.id),
+                    timeout
+                )
             }
         },
-
         created() {
-            this.findAllTasksBySectionIdOrderBySequence(this.$props.section.id)
+            this.findAllTasksBySectionIdOrderBySequence(this.section.id)
+            this.pollTasks()
+        },
+        beforeDestroy() {
+            clearInterval(this.pollingInterval)
         }
     }
 </script>

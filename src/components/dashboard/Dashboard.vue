@@ -49,9 +49,10 @@
             ...mapActions(['findAllProjects']),
 
             pollProjects() {
+                const timeout = 3000
                 this.pollingInterval = setInterval(
                     () => this.findAllProjects(),
-                    3000
+                    timeout
                 )
             }
         },

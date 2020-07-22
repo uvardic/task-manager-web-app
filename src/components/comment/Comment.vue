@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'TaskComment',
+        name: 'Comment',
         props: ['comment']
     }
 </script>

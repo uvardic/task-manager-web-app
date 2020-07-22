@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
     import draggable from 'vuedraggable'
 
     import CreateSection from '../section/CreateSection'
@@ -54,8 +54,8 @@
                 get() {
                     return this.getSections
                 },
-                set(value) {
-                    this.$store.commit('setAllSections', value)
+                set(sections) {
+                    this.setSections(sections)
                 }
             }
 
@@ -66,6 +66,8 @@
                 'updateSection',
             ]),
 
+            ...mapMutations(['setSections']),
+
             onDragEnd(e) {
                 const previousSection = this.getSections[e.newIndex - 1]
                 const nextSection = this.getSections[e.newIndex + 1]
@@ -74,23 +76,23 @@
 
                 const previousSectionSequence = previousSection ? previousSection.sequence : nextSection.sequence - 16000
                 const nextSectionSequence = nextSection ? nextSection.sequence : previousSection.sequence + 16000
+                const draggedSection = this.getSections[e.newIndex]
 
-                const currentSection = this.getSections[e.newIndex]
-
-                currentSection.sequence = (previousSectionSequence + nextSectionSequence) / 2
+                draggedSection.sequence = (previousSectionSequence + nextSectionSequence) / 2
                 this.updateSection({
-                    existingId: currentSection.id,
-                    request: currentSection
+                    existingId: draggedSection.id,
+                    request: draggedSection
                 })
             },
 
             pollProjects() {
+                const timeout = 3000
                 this.pollingInterval = setInterval(
                     () => {
                         const projectId = this.$route.params.projectId
                         this.findAllSectionsByProjectIdOrderBySequence(projectId)
                     },
-                    3000
+                    timeout
                 )
             }
         },

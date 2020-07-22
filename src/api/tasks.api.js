@@ -42,6 +42,22 @@ const updateTask = (existingId, request) => {
     return httpClient.post(ENDPOINT, { query, variables: { existingId, request } })
 }
 
+const findTaskById = id => {
+    const query = `query ($id: ID!) {
+        findTaskById(id: $id) {
+            id
+            name
+            sequence
+            description
+            section {
+                id
+            }
+        }
+    }`
+
+    return httpClient.post(ENDPOINT, { query, variables: { id } })
+}
+
 const findAllTasksBySectionIdOrderBySequence = sectionId => {
     const query = `query ($sectionId: ID!) {
         findAllTasksBySectionIdOrderBySequence(sectionId: $sectionId) {
@@ -62,5 +78,6 @@ export {
     deleteTaskById,
     saveTask,
     updateTask,
+    findTaskById,
     findAllTasksBySectionIdOrderBySequence
 }

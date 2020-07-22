@@ -23,24 +23,43 @@
         },
         data() {
             return {
-                task: ''
+                pollingInterval: null
             }
         },
         computed: {
             ...mapGetters([
                 'getTaskById',
                 'getComments'
-            ])
+            ]),
+
+            task: {
+                get() {
+                    return this.getTaskById(this.$route.params.taskId)
+                }
+            }
         },
         methods: {
             ...mapActions([
+                'findTaskById',
                 'findAllCommentsByTaskId'
-            ])
+            ]),
+
+            pollComments() {
+                const timeout = 3000
+                this.pollingInterval = setInterval(
+                    () => this.findAllCommentsByTaskId(this.$route.params.taskId),
+                    timeout
+                )
+            }
         },
         created() {
             const taskId = this.$route.params.taskId
-            this.task = this.getTaskById(taskId)
+            this.findTaskById(taskId)
             this.findAllCommentsByTaskId(taskId)
+            this.pollComments()
+        },
+        beforeDestroy() {
+            clearInterval(this.pollingInterval)
         }
     }
 </script>
