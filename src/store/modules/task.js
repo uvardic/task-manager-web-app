@@ -37,17 +37,21 @@ const actions = {
     },
 
     async findTaskById({ commit }, id) {
+        commit('setFetchingTasks', true)
         const response = await findTaskById(id)
         commit('setTask', response.data.findTaskById)
     },
 
     async findAllTasksBySectionIdOrderBySequence({ commit }, sectionId) {
+        commit('setFetchingTasks', true)
         const response = await findAllTasksBySectionIdOrderBySequence(sectionId)
         commit('setTasks', response.data.findAllTasksBySectionIdOrderBySequence)
     },
 }
 
 const mutations = {
+    setFetchingTasks: (state, fetchingTasks) => state.fetchingTasks = fetchingTasks,
+
     removeTask: (state, id) => {
         const index = state.tasks.findIndex(t => t.id === id)
         state.tasks.splice(index, 1)
@@ -67,6 +71,8 @@ const mutations = {
             state.tasks.splice(index, 1, task)
         else
             state.tasks.push(task)
+
+        state.fetchingTasks = false
     },
 
     // dont know how to use setTask method to remove this duplicate
@@ -78,6 +84,8 @@ const mutations = {
             else
                 state.tasks.push(task)
         }
+
+        state.fetchingTasks = false
     }
 }
 

@@ -2,7 +2,9 @@
     <div class="container project-wrapper">
         <CreateSection class="margin-top"/>
 
-        <draggable class="margin-top" v-model="sections" ghost-class="ghost" @end="onDragEnd">
+        <p v-if="isFetchingSections && !sections.length">Loading...</p>
+        <p v-if="!isFetchingSections && !sections.length">No sections found, please create a section.</p>
+        <draggable v-if="sections.length" class="margin-top" v-model="sections" ghost-class="ghost" @end="onDragEnd">
             <transition-group class="row" type="transition" name="animation">
                 <div class="col" v-for="section in sections" :key="section.id">
                     <Section :section="section"/>
@@ -48,7 +50,10 @@
             }
         },
         computed: {
-            ...mapGetters(['getSections']),
+            ...mapGetters([
+                'isFetchingSections',
+                'getSections'
+            ]),
 
             sections: {
                 get() {

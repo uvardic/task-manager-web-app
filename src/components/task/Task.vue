@@ -1,11 +1,14 @@
 <template>
     <div class="container margin-top">
-        <h2>{{ task.name }}</h2>
-        <p>{{ task.description ? task.description : 'No description was provided' }}</p>
-        <div class="margin-top">
-            <Comment v-for="comment in getComments" :key="comment.id" :comment="comment"/>
+        <p v-if="isFetchingTasks">Loading...</p>
+        <div v-if="!isFetchingTasks">
+            <h2>{{ task.name }}</h2>
+            <p>{{ task.description ? task.description : 'No description was provided' }}</p>
+            <div class="margin-top">
+                <Comment v-for="comment in getComments" :key="comment.id" :comment="comment"/>
+            </div>
+            <CreateComment/>
         </div>
-        <CreateComment/>
     </div>
 </template>
 
@@ -28,6 +31,7 @@
         },
         computed: {
             ...mapGetters([
+                'isFetchingTasks',
                 'getTaskById',
                 'getComments'
             ]),

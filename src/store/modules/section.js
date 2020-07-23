@@ -36,12 +36,15 @@ const actions = {
     },
 
     async findAllSectionsByProjectIdOrderBySequence({ commit }, projectId) {
+        commit('setFetchingSections', true)
         const response = await findAllSectionsByProjectIdOrderBySequence(projectId)
         commit('setSections', response.data.findAllSectionsByProjectIdOrderBySequence)
     }
 }
 
 const mutations = {
+    setFetchingSections: (state, fetchingSections) => state.fetchingSections = fetchingSections,
+
     removeSection: (state, id) => {
         const index = state.sections.findIndex(s => s.id === id)
         state.sections.splice(index, 1)
@@ -55,7 +58,10 @@ const mutations = {
             state.sections.splice(index, 1, section)
     },
 
-    setSections: (state, sections) => state.sections = sections,
+    setSections: (state, sections) => {
+        state.sections = sections
+        state.fetchingSections = false
+    }
 }
 
 export default {
