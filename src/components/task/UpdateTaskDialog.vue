@@ -53,8 +53,8 @@
             onSubmit(e) {
                 e.preventDefault()
 
-                const existingId = this.getUpdateTaskDialog.task.id
-                const request = this.getUpdateTaskDialog.task
+                const existingId = this.getUpdateTaskDialog.resource.id
+                const request = this.getUpdateTaskDialog.resource
 
                 request.name = this.name ? this.name : request.name
                 request.description = this.description ? this.description : request.description

@@ -28,7 +28,7 @@
             ]),
 
             confirmAction() {
-                const existingId = this.getDeleteSectionDialog.section.id
+                const existingId = this.getDeleteSectionDialog.resource.id
 
                 this.deleteSectionById(existingId)
                 this.toggleDeleteSectionDialog()

@@ -20,7 +20,6 @@
 
     export default {
         name: 'CreateSection',
-        props: ['project'],
         data() {
             return {
                 name: '',
@@ -30,7 +29,8 @@
         computed: {
             ...mapGetters([
                 'getSections',
-                'getProjectById'
+                'getProjectById',
+                'getSectionsByProjectId'
             ])
         },
         methods: {
@@ -45,23 +45,19 @@
 
                 if (this.erros.length) return
 
-                const project = this.getProject()
-                const numberOfSections = project.sections.length
-                const sequence = numberOfSections ? project.sections[numberOfSections - 1].sequence + 16000 : 16000
+                const projectId = this.$route.params.projectId
+                const sections = this.getSectionsByProjectId(projectId)
+                const sequence = sections.length ? sections[sections.length - 1].sequence + 16000 : 16000
 
                 this.saveSection({
                     name: this.name,
                     sequence,
                     project: {
-                        id: this.$route.params.projectId
+                        id: projectId
                     }
                 })
             },
 
-            getProject() {
-                const projectId = this.$route.params.projectId
-                return this.getProjectById(projectId)
-            }
         }
     }
 </script>

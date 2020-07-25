@@ -28,8 +28,7 @@
             ]),
 
             confirmAction() {
-                const existingId = this.getDeleteTaskDialog.task.id
-
+                const existingId = this.getDeleteTaskDialog.resource.id
                 this.deleteTaskById(existingId)
                 this.toggleDeleteTaskDialog()
             },

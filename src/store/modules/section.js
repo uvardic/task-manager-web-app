@@ -16,7 +16,9 @@ const getters = {
 
     getSections: state => state.sections,
 
-    getSectionById: state => id => state.sections.find(s => s.id === id)
+    getSectionById: state => id => state.sections.find(s => s.id === id),
+
+    getSectionsByProjectId: state => projectId => state.sections.filter(s => s.project.id === projectId)
 }
 
 const actions = {

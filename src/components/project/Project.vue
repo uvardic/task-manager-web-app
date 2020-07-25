@@ -79,8 +79,8 @@
 
                 if (!previousSection && !nextSection) return
 
-                const previousSectionSequence = previousSection ? previousSection.sequence : nextSection.sequence - 16000
-                const nextSectionSequence = nextSection ? nextSection.sequence : previousSection.sequence + 16000
+                const previousSectionSequence = previousSection ? previousSection.sequence : nextSection.sequence / 2
+                const nextSectionSequence = nextSection ? nextSection.sequence : previousSection.sequence * 2
                 const draggedSection = this.getSections[e.newIndex]
 
                 draggedSection.sequence = (previousSectionSequence + nextSectionSequence) / 2

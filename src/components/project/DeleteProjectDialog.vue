@@ -28,7 +28,7 @@
             ]),
 
             confirmAction() {
-                const existingId = this.getDeleteProjectDialog.project.id
+                const existingId = this.getDeleteProjectDialog.resource.id
                 this.deleteProjectById(existingId)
                 this.toggleDeleteProjectDialog()
             },

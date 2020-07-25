@@ -27,7 +27,7 @@ const actions = {
 
     async updateProject({ commit }, { existingId, request }) {
         const response = await updateProject(existingId, request)
-        commit('updateProjects', response.data.updateProject)
+        commit('updateProject', response.data.updateProject)
     },
 
     async findAllProjects({ commit }) {
@@ -59,7 +59,6 @@ const mutations = {
     }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default {
     state,
     getters,

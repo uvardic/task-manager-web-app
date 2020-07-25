@@ -48,7 +48,10 @@
             }
         },
         computed: {
-            ...mapGetters(['getCreateTaskDialog'])
+            ...mapGetters([
+                'getCreateTaskDialog',
+                'getTasksBySectionId'
+            ])
         },
         methods: {
             ...mapActions([
@@ -64,9 +67,9 @@
 
                 if (this.errors.length) return
 
-                const section = this.getCreateTaskDialog.section
-                const numberOfTasks = section.tasks.length
-                const sequence = numberOfTasks ? section.tasks[numberOfTasks - 1].sequence + 16000 : 16000
+                const section = this.getCreateTaskDialog.resource
+                const tasks = this.getTasksBySectionId(section.id)
+                const sequence = tasks.length ? tasks[tasks.length - 1].sequence + 16000 : 16000
 
                 this.saveTask({
                     name: this.name,

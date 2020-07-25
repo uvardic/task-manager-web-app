@@ -49,7 +49,7 @@
 
                 if (this.errors.length) return
 
-                const existingId = this.getUpdateProjectDialog.project.id
+                const existingId = this.getUpdateProjectDialog.resource.id
                 const request = { name: this.name }
 
                 this.updateProject({ existingId, request })

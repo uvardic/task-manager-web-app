@@ -43,13 +43,15 @@
         computed: {
             ...mapGetters([
                 'getUpdateSectionDialog',
-                'getProjects'
+                'getProjects',
+                'getSectionsByProjectId'
             ])
         },
         methods: {
             ...mapActions([
                 'updateSection',
-                'toggleUpdateSectionDialog'
+                'toggleUpdateSectionDialog',
+                'findAllProjects'
             ]),
 
             ...mapMutations(['removeSection']),
@@ -57,25 +59,33 @@
             onSubmit(e) {
                 e.preventDefault()
 
-                const existingId = this.getUpdateSectionDialog.section.id
-                const request = this.getUpdateSectionDialog.section
+                const existingId = this.getUpdateSectionDialog.resource.id
+                const request = this.getUpdateSectionDialog.resource
 
                 request.name = this.name ? this.name : request.name
 
-                if (this.project && this.project.id !== request.project.id) {
-                    const lastSection = this.project.sections[this.project.sections.length - 1]
+                if (this.projectChanged(request)) {
+                    const sections = this.getSectionsByProjectId(this.project.id)
+                    const lastSection = sections[sections.length - 1]
                     request.sequence = lastSection ? lastSection.sequence + 16000 : 16000
                     request.project = this.project
-                    this.removeSection(existingId)
                 }
 
                 this.updateSection({ existingId, request })
                 this.toggleUpdateSectionDialog()
             },
 
+            projectChanged(request) {
+                return this.project && this.project.id !== request.project.id
+            },
+
             cancelAction() {
                 this.toggleUpdateSectionDialog()
             }
+        },
+        created() {
+            // in case of page refresh we lose projects needed for this component
+            this.findAllProjects()
         }
     }
 </script>

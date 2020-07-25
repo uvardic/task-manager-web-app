@@ -1,5 +1,4 @@
 import httpClient from './httpClient';
-import axios from "axios";
 
 const ENDPOINT = '/graphql'
 
@@ -19,7 +18,7 @@ const saveProject = request => {
         }
     }`
 
-    return axios.post(ENDPOINT, { query, variables: { request } })
+    return httpClient.post(ENDPOINT, { query, variables: { request } })
 }
 
 const updateProject = ( existingId, request ) => {
@@ -30,7 +29,7 @@ const updateProject = ( existingId, request ) => {
         }
     }`
 
-    return axios.post(ENDPOINT, { query, variables: { existingId, request } })
+    return httpClient.post(ENDPOINT, { query, variables: { existingId, request } })
 }
 
 const findProjectById = id => {
@@ -41,7 +40,7 @@ const findProjectById = id => {
         }
     }`
 
-    return axios.post(ENDPOINT, { query, variables: { id } })
+    return httpClient.post(ENDPOINT, { query, variables: { id } })
 }
 
 const findAllProjects = () => {

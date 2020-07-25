@@ -89,8 +89,8 @@
                 if (!previousTask && !nextTask) {
                     draggedTask.sequence = 16000
                 } else {
-                    const previousTaskSequence = previousTask ? previousTask.sequence : nextTask.sequence - 16000
-                    const nextTaskSequence = nextTask ? nextTask.sequence : previousTask.sequence + 16000
+                    const previousTaskSequence = previousTask ? previousTask.sequence : nextTask.sequence / 2
+                    const nextTaskSequence = nextTask ? nextTask.sequence : previousTask.sequence * 2
                     draggedTask.sequence = (previousTaskSequence + nextTaskSequence) / 2
                 }
 

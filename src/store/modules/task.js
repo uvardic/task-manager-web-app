@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import {
     deleteTaskById,
     findAllTasksBySectionIdOrderBySequence,
@@ -9,15 +10,22 @@ import {
 const state = {
     fetchingTasks: false,
 
-    tasks: []
+    // key: sectionId
+    // value: array of tasks
+    tasks: {}
 }
 
 const getters = {
     isFetchingTasks: state => state.fetchingTasks,
 
-    getTaskById: state => id => state.tasks.find(t => t.id === id),
+    getTaskById: state => id => {
+        for (const key in state.tasks) {
+            let task = state.tasks[key].find(t => t.id === id)
+            if (task) return task
+        }
+    },
 
-    getTasksBySectionId: state => sectionId => state.tasks.filter(t => t.section.id === sectionId)
+    getTasksBySectionId: state => sectionId => state.tasks[sectionId]
 }
 
 const actions = {
@@ -45,7 +53,8 @@ const actions = {
     async findAllTasksBySectionIdOrderBySequence({ commit }, sectionId) {
         commit('setFetchingTasks', true)
         const response = await findAllTasksBySectionIdOrderBySequence(sectionId)
-        commit('setTasks', response.data.findAllTasksBySectionIdOrderBySequence)
+        const tasks = response.data.findAllTasksBySectionIdOrderBySequence
+        commit('setTasks', { sectionId, tasks })
     },
 }
 
@@ -53,38 +62,39 @@ const mutations = {
     setFetchingTasks: (state, fetchingTasks) => state.fetchingTasks = fetchingTasks,
 
     removeTask: (state, id) => {
-        const index = state.tasks.findIndex(t => t.id === id)
-        state.tasks.splice(index, 1)
+        for (const key in state.tasks) {
+            let index = state.tasks[key].findIndex(t => t.id === id)
+            if (index !== - 1)
+                state.tasks[key].splice(index, 1)
+        }
     },
 
-    addTask: (state, task) => state.tasks.push(task),
+    addTask: (state, task) => state.tasks[task.section.id].push(task),
 
     updateTask: (state, task) => {
-        const index = state.tasks.findIndex(t => t.id === task.id)
+        const tasks = state.tasks[task.section.id]
+        const index = tasks.findIndex(t => t.id === task.id)
         if (index !== -1)
-            state.tasks.splice(index, 1, task)
+            tasks.splice(index, 1, task)
     },
 
     setTask: (state, task) => {
-        const index = state.tasks.findIndex(t => t.id === task.id)
-        if (index !== -1)
-            state.tasks.splice(index, 1, task)
-        else
-            state.tasks.push(task)
+        if (!state.tasks[task.section.id]) {
+            Vue.set(state.tasks, task.section.id, [task])
+        } else {
+            const tasks = state.tasks[task.section.id]
+            const index = tasks.findIndex(t => t.id === task.id)
+            if (index !== -1)
+                tasks.splice(index, 1, task)
+            else
+                tasks.push(task)
+        }
 
         state.fetchingTasks = false
     },
 
-    // dont know how to use setTask method to remove this duplicate
-    setTasks: (state, tasks) => {
-        for (const task of tasks) {
-            const index = state.tasks.findIndex(t => t.id === task.id)
-            if (index !== -1)
-                state.tasks.splice(index, 1, task)
-            else
-                state.tasks.push(task)
-        }
-
+    setTasks: (state, { sectionId, tasks }) => {
+        Vue.set(state.tasks, sectionId, tasks)
         state.fetchingTasks = false
     }
 }
